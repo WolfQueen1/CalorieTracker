@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>CalorieTracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <h1 class="mb-4">Calorie Tracker</h1>
+
+    <h3>Adaugă un aliment</h3>
+    <form action="/adauga-aliment" method="post" class="mb-4">
+        <input type="text" name="nume" placeholder="Nume aliment" required class="form-control mb-2">
+        <input type="number" name="calorii" placeholder="Calorii pe porție" required class="form-control mb-2">
+        <input type="text" name="categorie" placeholder="Categorie (ex. mic dejun)" class="form-control mb-2">
+        <button class="btn btn-primary">Adaugă aliment</button>
+    </form>
+
+    <h3>Înregistrează o masă</h3>
+    <form action="/adauga-masa" method="post" class="mb-4">
+        <select name="aliment_id" required class="form-select mb-2">
+            {% for aliment in alimente %}
+            <option value="{{ aliment.id }}">{{ aliment.nume }} - {{ aliment.calorii_pe_portie }} cal</option>
+            {% endfor %}
+        </select>
+        <input type="number" step="0.1" name="portii" placeholder="Porții" required class="form-control mb-2">
+        <input type="date" name="data" value="{{ date.today() }}" required class="form-control mb-2">
+        <button class="btn btn-success">Adaugă masă</button>
+    </form>
+
+    <h3>Mese înregistrate</h3>
+    <ul class="list-group mb-4">
+        {% for masa in mese %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ masa.data }}: {{ masa.nume }} ({{ masa.portii }} porții) - {{ masa.portii * masa.calorii_pe_portie }} cal
+            <a href="/sterge-masa/{{ masa.id }}" class="btn btn-sm btn-danger">Șterge</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h4>Calorii totale pe zi:</h4>
+    <ul class="list-group">
+        {% for zi, total in calorii.items() %}
+        <li class="list-group-item">{{ zi }}: {{ total }} cal</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
